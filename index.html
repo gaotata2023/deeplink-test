@@ -3,50 +3,54 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>AliExpress Deeplink</title>
+    <title>AliExpress Deeplink Test</title>
 
     <style>
-        body{
-            font-family: Arial;
-            text-align:center;
-            margin-top:120px;
-            color:#333;
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 120px;
+            color: #333;
         }
     </style>
-
 </head>
 
 <body>
 
 <h2>Opening AliExpress...</h2>
-<p>如果没有自动打开，将自动跳转网页。</p>
+<p>正在尝试打开 App，如果失败将自动跳转网页。</p>
 
 <script>
 
 const dp =
-"aliexpress://goto?url=https%3A%2F%2Fwww.aliexpress.com%2Fssr%2F300001872%2FkQ5f3TETzm%3FdisableNav%3DYES%26pha_manifest%3Dssr%26_immersiveMode%3Dtrue%26businessCode%3Dug%26albch%3Drmkt%26src%3Ddomob%26aff_short_key%3D_2a8noy6%26aff_platform%3Dtrue%26isdl%3Dy%26albcp%3DDomo812059%26rta_sub_id1%3Dsa%26rta_sub_id2%3Ddomob-US-sa-vo%26rta_sub_id3%3D%7BSA_POSTBACK_ID%7D";
+"aliexpress://goto?url=https%3A%2F%2Fwww.aliexpress.com%2Fssr%2F300001872%2FkQ5f3TETzm%3FdisableNav%3DYES%26pha_manifest%3Dssr%26_immersiveMode%3Dtrue%26businessCode%3Dug%26albch%3Drmkt%26src%3Ddomob%26aff_short_key%3D_2a8noy6%26aff_platform%3Dtrue%26isdl%3Dy%26albcp%3DDomo812059%26rta_sub_id1%3Dsa%26rta_sub_id2%3Ddomob-US-sa-vo";
 
 const h5 =
-"https://www.aliexpress.com/ssr/300001872/kQ5f3TETzm?disableNav=YES&pha_manifest=ssr&_immersiveMode=true&businessCode=ug&albch=rmkt&src=domob&aff_short_key=_2a8noy6&aff_platform=true&isdl=y&albcp=Domo812059&rta_sub_id1=sa&rta_sub_id2=domob-US-sa-votest&rta_sub_id3={SA_POSTBACK_ID}";
+"https://www.aliexpress.com/ssr/300001872/kQ5f3TETzm?disableNav=YES&pha_manifest=ssr&_immersiveMode=true&businessCode=ug&albch=rmkt&src=domob&aff_short_key=_2a8noy6&aff_platform=true&isdl=y&albcp=Domo812059&rta_sub_id1=sa&rta_sub_id2=domob-US-sa-vo";
 
 const timeout = 1500;
+
+console.log("开始尝试 Deeplink");
+console.log(dp);
 
 // 尝试打开 App
 window.location.href = dp;
 
-// 超时跳 H5
+// 如果没有成功拉起，则跳 H5
 const timer = setTimeout(() => {
+    console.log("Deeplink 失败，跳 H5");
     window.location.href = h5;
 }, timeout);
 
-// 如果 App 已成功打开，则取消 H5
+// 如果 App 已拉起，则取消 H5 跳转
 document.addEventListener("visibilitychange", () => {
-    if(document.hidden){
+    if (document.hidden) {
+        console.log("App 已拉起");
         clearTimeout(timer);
     }
 });
 
-// Safari 有时不会触发 visibilitychange
+// Safari 兼容
 window.addEventListener("pagehide", () => {
     clearTimeout(timer);
 });
